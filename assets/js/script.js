@@ -5,17 +5,13 @@ const setInfoModal = (nombre, balance, id) => {
 };
 
 const editUsuario = async (id) => {
-  const name = $("#nombreEdit").val();
+  const nombre = $("#nombreEdit").val();
   const balance = $("#balanceEdit").val();
   try {
-    const { data } = await axios.put(
-      `http://localhost:3000/usuario?id=${id}`,
-
-      {
-        nombre: name,
-        balance,
-      }
-    );
+    const { data } = await axios.put(`http://localhost:3000/usuario?id=${id}`, {
+      nombre,
+      balance,
+    });
     $("#exampleModal").modal("hide");
     location.reload();
   } catch (e) {
@@ -78,21 +74,21 @@ const getUsuarios = async () => {
 
   $.each(data, (i, c) => {
     $(".usuarios").append(`
-              <tr>
-                <td>${c.nombre}</td>
-                <td>${c.balance}</td>
-                <td>
-                  <button
-                    class="btn btn-warning mr-2"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    onclick="setInfoModal('${c.nombre}', '${c.balance}', '${c.id}')"
-                  >
-                    Editar</button
-                  ><button class="btn btn-danger" onclick="eliminarUsuario('${c.id}')">Eliminar</button>
-                </td>
-              </tr>
-         `);
+        <tr>
+          <td>${c.nombre}</td>
+          <td>${c.balance}</td>
+          <td>
+            <button
+              class="btn btn-warning mr-2"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onclick="setInfoModal('${c.nombre}', '${c.balance}', '${c.id}')"
+            >
+              Editar</button
+            ><button class="btn btn-danger" onclick="eliminarUsuario('${c.id}')">Eliminar</button>
+          </td>
+        </tr>
+   `);
 
     $("#emisor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
     $("#receptor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
@@ -101,9 +97,10 @@ const getUsuarios = async () => {
 
 const eliminarUsuario = async (id) => {
   const response = await fetch(`http://localhost:3000/usuario?id=${id}`, {
+    headers: { "Content-Type": "application/json" },
     method: "DELETE",
   });
-  alert("Usuario eliminado");
+  alert(`usuario con id: ${id} eliminado`);
   getUsuarios();
 };
 
@@ -113,13 +110,13 @@ const getTransferencias = async () => {
 
   data.forEach((t) => {
     $(".transferencias").append(`
-       <tr>
-         <td> ${formatDate(t[3])} </td>
-         <td> ${t[0]} </td>
-         <td> ${t[1]} </td>
-         <td> ${t[2]} </td>
-       </tr>
-     `);
+ <tr>
+   <td> ${formatDate(t[3])} </td>
+   <td> ${t[0]} </td>
+   <td> ${t[1]} </td>
+   <td> ${t[2]} </td>
+ </tr>
+`);
   });
 };
 

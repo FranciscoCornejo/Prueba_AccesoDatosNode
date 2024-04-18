@@ -4,46 +4,47 @@ const router = express.Router();
 // la primera crea una instancia de la aplicación principal de Express
 //la segunda  crea un objeto Router independiente que se puede montar en la aplicación principal para manejar rutas específicas
 
+//importacion del path e instancia de dirname para renderir el html
 import path from "path";
 const __dirname = import.meta.dirname;
 
 import {
-  getDate,
-  selectQuery,
-  insertQuery,
-  putQuery,
-  deleteQuery,
-  insertTransferencia,
-  selectTransferencia,
-} from "../querys/querys.js"; //importa querys.js
+  conexionDB,
+  createUser,
+  readUser,
+  updateUser,
+  deleteUser,
+} from "../controllers/userController.js";
+
+import {
+  createTransfer,
+  readTransfer,
+} from "../controllers/transferController.js";
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/index.html"));
 });
 
 //prueba de conexión a la base de datos
-router.get("/", async (req, res) => {
-  const conexion = await getDate();
-  res.json(conexion);
-});
-
-//read
-router.post("/usuario", selectQuery);
+router.get("/conexion", conexionDB);
 
 //create
-router.get("/usuarios", insertQuery);
+router.post("/usuario", createUser);
+
+//read
+router.get("/usuarios", readUser);
 
 //update
-router.put("/usuario", putQuery);
+router.put("/usuario", updateUser);
 
 //delete
-router.delete("/usuario", deleteQuery);
+router.delete("/usuario", deleteUser);
 
 //create transferencia
-router.post("/transferencia", insertTransferencia);
+router.post("/transferencia", createTransfer);
 
 //read transferencia
-router.get("/transferencias", selectTransferencia);
+router.get("/transferencias", readTransfer);
 
 router.get("*", (req, res) => res.send("ruta no encontrada"));
 
